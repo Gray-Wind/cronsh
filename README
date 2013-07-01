@@ -1,0 +1,8 @@
+How to use:
+
+* open and modify TODO and TIMETOSLEEP for your need
+* add to crontab or RC
+
+If you want to change TODO or TIMETOSLEEP vars you can edit it. Cron.sh will rerun self with new parameters.
+
+Welcome with suggestions (:
