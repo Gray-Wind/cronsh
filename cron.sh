@@ -5,7 +5,7 @@ then
 	rm -f /tmp/*.cronwget.pid
 fi
 
-TODO="echo 123 >>/tmp/123"
+TODO="echo 123 | wall"
 TIMETOSLEEP=10
 
 SELFNAME=$0
@@ -45,4 +45,4 @@ ps ax | awk '{ print $1 }' | grep -q $PID || {
 	runcron
 }
 
-#nothing to be done — process run and
+#nothing to be done — process run
