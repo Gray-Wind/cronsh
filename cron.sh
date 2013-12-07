@@ -13,15 +13,33 @@ OLDPIDFILE=`ls -1 /tmp/*.cronwget.pid 2>/dev/null | head 2>/dev/null`
 PID=`echo $OLDPIDFILE | xargs basename 2>/dev/null | awk -F "." '{print $1}'`
 NEWPIDFILE="/tmp/$$.cronwget.pid"
 
+#search for md5 program
+which md5sum 2>/dev/null 1>&2
+RV=$?
+[ $RV -eq 0 ] && {
+	MD5="md5sum"
+}
+[ $RV -ne 0 ] && {
+	which md5 2>/dev/null 1>&2
+	RV=$?
+	[ $RV -eq 0 ] && {
+		MD5="md5"
+	}
+	[ $RV -ne 0 ] && {
+		echo "cannot find md5 program"
+		exit 1
+	}
+}
+
 function runcron {
-	md5sum $SELFNAME > $NEWPIDFILE
+	$MD5 $SELFNAME > $NEWPIDFILE
 	
 	while [ true ] ; do
 		sleep $TIMETOSLEEP &
-		sh -c $TODO
+		sh -c "$TODO"
 		wait
 
-		if [ "x`md5sum $SELFNAME`" != "x`cat $NEWPIDFILE`" ]
+		if [ "x`$MD5 $SELFNAME`" != "x`cat $NEWPIDFILE`" ]
 		then
 			#file was midifed
 			break
